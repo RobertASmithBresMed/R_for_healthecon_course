@@ -1,0 +1,80 @@
+---
+title: 'R markdown: A tutorial'
+author: "Paul Schneider & Sarah Bates"
+date: "18/01/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+R Markdown documents can be used to write reports. In this example I am rendering this report to PDF, but it could be output in Word or as an online document.
+
+# Dataframe
+
+```{r, echo = F}
+
+height <- c(1.38,1.45,1.21,1.56) # combine is used to create the vector.
+weight <- c(45,42,43,50)
+first_name <- c("Alice","Bob","Harry","Jane")
+sex <- factor(x = c("F","M","M","F"))
+df <- data.frame(height,weight,first_name,sex)
+df$bmi <- df$weight / df$height^2 
+
+df
+```
+
+# Results
+
+Change over 5 years: 
+
+```{r, echo=F, message=FALSE}
+
+df$age<- c(16,15,13,18)
+
+# set number of years
+n_years = 5
+
+# we can simulate change in bmi and age of number of year
+for (i in 1:n_years){
+  
+  # create 4 random numbers to simulate bmi change
+  bmi_change<-rnorm(n = 4,mean = 1,sd = 1)
+  
+  # Create a data frame named DF with the year with three columns; first name from df,
+  # age from df with year added and bmi from df with random change added
+  
+  assign(paste0("DF", i), data.frame(first_name = df$first_name, age=(df$age+i), bmi=df$bmi + bmi_change))
+
+}
+
+# combine these together using rbind
+df_year <- rbind(DF1, DF2, DF3, DF4, DF5)
+df_year
+
+
+
+```
+
+
+## Including Plots
+
+You can also embed plots. Here is BMI change over time
+
+```{r, echo=F, message=FALSE, warning = FALSE}
+
+
+# Plot these on a line graph
+library(ggplot2)
+
+ggplot(data=df_year, aes(x=age, y=bmi, group=first_name)) +
+  geom_line(aes(linetype=first_name))+
+  geom_point(aes(shape=first_name))
+
+
+```
+
+

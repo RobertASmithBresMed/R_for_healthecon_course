@@ -1,6 +1,6 @@
 #=============#
 # Intro to R for Health Economics
-# Paul Schneider, Rob Smith & Sarah Bates
+# Paul Schneider & Sarah Bates
 # Session 1 
 #=============#
 
@@ -517,12 +517,166 @@ ggplot(df_gapminder,
   transition_time(year) +
   ease_aes('linear')
 
+#=============#
+# Intro to R for Health Economics
+# Paul Schneider & Sarah Bates
+# Day 2 Session 1 
+#=============#
 
 
+#====================#
+# For loop ----
+#====================#
+
+# For loops can be used to repeat the same action multiple times without lots of 
+# lines of code. This is a simple function to print list of numbers
+for(i in 1:10) {                                           
+  
+  print(i)                                               
+}
+
+# It's useful to when applying a function to all rows or columns of a dataset
+
+# recreate simple data frame used previously
+
+height <- c(1.38,1.45,1.21,1.56) # combine is used to create the vector.
+weight <- c(45,42,43,50)
+first_name <- c("Alice","Bob","Harry","Jane")
+sex <- factor(x = c("F","M","M","F"))
+df <- data.frame(height,weight,first_name,sex)
+df$bmi <- df$weight / df$height^2 
+
+# use the for loop to report each persons height
+for (i in 1:nrow(df)) {
+  
+   # print combination of the value in column 3 (first name) with the value in column 1 (height)
+   print(paste0(df[i,3], " is ",df[i,1], "m tall"))
+             
+}
+
+# use the for loop to change the variable name (column)
+
+for(i in 1:ncol(df)) {          
+  
+  # change the name of each column to var followed by the column number
+  colnames(df)[i] <- paste0("Var_", i)              
+}
+
+# for loops are useful in modelling becuase we can can use them to simulate change over time
+
+# We add an age column to df
+df$age<- c(16,15,13,18)
+
+# set number of years
+n_years = 5
+
+# we can simulate change in bmi and age of number of year
+for (i in 1:n_years){
+  
+  # create 4 random numbers to simulate bmi change
+  bmi_change<-rnorm(n = 4,mean = 1,sd = 1)
+  
+  # Create a data frame named DF with the year with three columns; first name from df,
+  # age from df with year added and bmi from df with random change added
+  
+  assign(paste0("DF", i), data.frame(first_name = df$first_name, age=(df$age+i), bmi=df$bmi + bmi_change))
+
+}
+
+# combine these together using rbind
+df_year <- rbind(DF1, DF2, DF3, DF4, DF5)
+df_year
+
+#library(ggplot2)
+
+# Plot these on a line graph
+ggplot(data=df_year, aes(x=age, y=bmi, group=first_name)) +
+  geom_line(aes(linetype=first_name))+
+  geom_point(aes(shape=first_name))
 
 
+#====================#
+# Custom functions ----
+#====================#
 
 
+# Creating a custom function can be really useful - reduces lines of code and makes work
+# easily reproducible, clearer and more organised
+
+# The structure of a function is:
+
+#  function_name <- function(arg1, arg2, ... ){
+#   statements
+#    return(object)
+# }
+
+# Here's a simple example 
+
+f_simple <- function(x,y,z){
+  
+  value = x + y - z
+  
+  return(value)
+  
+}
+
+# to see the details of the function you can just run the name
+f_simple
+
+# to run the function, add the arguement in brackets
+
+f_simple(1,2,3)
+f_simple(6,5,12)
+
+# Try creating a function: Create a function that calculates the difference 
+# between the maximum & mean of the three numbers (x, y, z) and returns a single number.
+
+#This is useful for PSA inputs for health economic modelling, for example:
+
+f_gen_psa <- function(n_sim = 1000){
+  
+  # creating a vector with values drawn from the beta distribution with the two parameters
+      param1   = rbeta(n = n_sim,
+                    shape1 =  30,
+                    shape2 =  170)
+      
+      return(param1)
+
+}
+
+f_gen_psa(n_sim = 5)
+
+# can expand this to include a greater number of parameters
+
+f_gen_psa <- function(n_sim = 1000){
+  
+  require(truncnorm)
+  
+  #expanded to a data frame to contain more than one column 
+  df_psa <- data.frame(
+   
+    param1   = rbeta(n = n_sim,
+                    shape1 =  30,
+                    shape2 =  170),
+    
+    # added a column with values drawn from the trucated normal distribution with the two parameters
+    param2   = rtruncnorm(n = n_sim, 
+                       mean = 1, 
+                       sd = 0.01, 
+                       b = 1)
+  )
+  
+  return(df_psa)
+}
+
+f_gen_psa(n_sim = 5)
+
+#====================#
+# R Markdown  ----
+#====================#
+
+install.packages(rmarkdown)
+tinytex::install_tinytex()
 
 
 
