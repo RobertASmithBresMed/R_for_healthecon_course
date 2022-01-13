@@ -1,13 +1,19 @@
 #=============#
 # Intro to R for Health Economics
 # Paul Schneider & Sarah Bates
-# Day 1 Session 1 
-#=============#
+
+#==========================#
+# DAY 1  ----
+#==========================#
 
 rm(list = ls())
 
 #=====================#
-# Basic operations ----
+# 1 R AS A FANCY CALCULATOR ----
+#=====================#
+
+#=====================#
+# 1.1 Basic operations ----
 #=====================#
 
 # add 1 to 1. 
@@ -24,8 +30,9 @@ rm(list = ls())
 5*6+2
 5*(6+2)
 
+
 #=====================#
-# Objects ----
+# 1.2 Objects ----
 #=====================#
 
 # create an object x which is 3
@@ -42,8 +49,9 @@ x + y
 z <- x + y
 z
 
+
 #========================#
-# Manipulate Objects  ----
+# 1.3 Manipulate Objects  ----
 #========================#
 
 a <- 10
@@ -61,16 +69,16 @@ a-b
 
 
 #=====================#
-# See our Objects  ----
+# 1.4 See our Objects  ----
 #=====================#
 
 # prints the objects in the environment
 ls()
 
-#=====================#
-# Removing Objects ----
-#=====================#
 
+#=====================#
+# 1.5 Removing Objects ----
+#=====================#
 
 # sometimes we may want to remove an object.
 rm(a)
@@ -79,10 +87,10 @@ rm(x,y)
 # remove all objects
 rm(list=ls())
 
-#=====================#
-#    Evaluations   ----
-#=====================#
 
+#=====================#
+# 1.6 Evaluations   ----
+#=====================#
 
 # simple evaluations
 # 4 is greater than 2
@@ -100,37 +108,50 @@ rm(list=ls())
 b <- 4<2
 b
 
-#====================#
-# Quick practice ----
-#====================#
-
-# I Create an object foo and set it to be 8
-# II Create another object bar, and set it to be 7
-# III Is foo divided by bar greater than 1.14 ?
 
 #====================#
-# Object Classes ----
+# 1.7 Quick practice ----
+#====================#
+
+# EXERCISE: quick practice
+# 1. Create an object foo and set it to be 8
+# 2. Create another object bar, and set it to be 7
+# 3. Is foo divided by bar greater than 1.14 ?
+
+foo <- 8
+bar <- 7
+foo / bar > 1.14
+
+
+#====================#
+# 1.8 Object Classes ----
 #====================#
 
 # numeric
 height <- c(1.38,1.45,1.21,1.56) # combine is used to create the vector.
 height
+
 # numeric
 weight <- c(45,42,43,50)
 weight
 class(weight)
+
 # character
 first_name <- c("Alice","Bob","Harry","Jane")
 first_name
 #first_name + 1 # error
+
 # factor
 sex <- factor(x = c("F","M","M","F"))
 sex
-# logical
+
+# logical/boolean
 tall <- height > 1.4
 
+
 #=====================#
-# Operations on different data structures
+# 1.9 Operations on different data structures ----
+#=====================#
 
 #Adding:
 c(1,2,3) + 1
@@ -142,8 +163,9 @@ c(height,weight)
 # concatenating to string
 c(height,weight,first_name)
 
-
-## Basic object Types
+#=====================#
+## 1.10 Basic object Types ----
+#=====================#
 
 # data frame- columns are variables, rows are observations.
 df <- data.frame(height,weight,first_name,sex)
@@ -154,8 +176,9 @@ df$height
 df$bmi <- df$weight / df$height^2 
 df
 
-
-## Subsetting
+#=====================#
+## 1.11 Subsetting  -----
+#=====================#
 
 # Our data-frame contains the height, weight, first name and bmi of 4 individuals.
 df
@@ -186,13 +209,19 @@ df[!min_height,]
 # Exercise 1 
 #=====================#
 
+
+
+# . -------------------------
+
+
+
 #=====================#
-# Session 2
+# 2 DATA ANALYSIS -----
 #=====================#
 
-#=============
-# Check your R enviroment  -----
-#=============
+#=====================#
+# 2.1 Check your R enviroment  -----
+#=====================#
 
 # check
 ls()
@@ -203,9 +232,10 @@ rm(list = ls())
 # re-check
 ls()
 
-#=============
-# Importing data -----
-#=============
+
+#=====================#
+# 2.2 Importing data -----
+#=====================#
 
 # csv = comma separated values
 ## Local file path
@@ -216,7 +246,7 @@ dat <- read.csv("https://raw.githubusercontent.com/ScHARR-PHEDS/R4ScHARR/master/
 
 
 #====================#
-# Get an overview of the data set ----
+# 2.3 Get an overview of the data set ----
 #====================#
 str(dat)
 
@@ -228,27 +258,38 @@ head(dat)
 
 # --> NA values spooted!
 
+# na.rm = T 
+mean(dat$sysBP, na.rm = T)
+
+
 #====================#
-# Missing values  ----
+# 2.4 Missing values  ----
 #====================#
 dat$sysBP
 
 is.na( dat$sysBP)
 sum( is.na( dat$sysBP ) ) 
 
-# remove cases with missing values
+# remove cases with missing values in sysBP
 dat <- dat[!is.na(dat$sysBP), ]
-# dat <- dat[complete.cases(dat$sysBP), ]
+
+# remove cases with any missing values
+# dat <- dat[complete.cases(dat), ]
 
 
 #====================#
-# Simple stats ----
+# 2.5 Simple stats ----
 #====================#
 
 # average blood pressure
 mean(dat$sysBP)
 # standard deviation
 sd(dat$sysBP)
+# median
+median(dat$sysBP)
+# IQR
+IQR(dat$sysBP)
+quantile(dat$sysBP, probs = c(0.25, 0.75))
 
 # you can assign function outputs to objects
 BP_mean <- mean(dat$sysBP)
@@ -257,47 +298,72 @@ BP_sd <- sd(dat$sysBP)
 # and use these objects afterwards
 BP_mean -  1.96 * BP_sd
 BP_mean +  1.96 * BP_sd
-# 
-# quantile(dat$heartRate, probs = c(0.05, 0.95))
+
+
+# # Tip: do not 'attach' data frames, even if it's convenient !
+# attach(dat)
+# sysBP
 
 
 #====================#
-# Plotting your data: the histogram ----
+# 2.6 Plotting your data: the histogram ----
 #====================#
 
 hist(dat$sysBP, breaks = 25)
 # add a line indicating the mean
 abline(v = BP_mean, col = "blue",lwd = 3)
 
-#====================#
-# Plotting your data: the scatter plot ----
-#====================#
 
+#====================#
+# 2.7 Plotting your data: the scatter plot ----
+#====================#
 plot(x = dat$age, y = dat$sysBP)
 
+# styling your plot
+plot(x = dat$age, y = dat$sysBP, col = "cadetblue")
+plot(x = dat$age, y = dat$sysBP, col = "cadetblue", cex = 0.5)
+plot(x = dat$age, y = dat$sysBP, col = "cadetblue", cex = 0.5, pch = 19)
+plot(
+  x = dat$age, 
+  y = dat$sysBP, 
+  col = "cadetblue", 
+  cex = 0.5, 
+  pch = 19,
+  xlab = "Age",
+  ylab = "Systolic BP (mmHG)"
+  )
+
 
 #====================#
-# Linear regression ----
+# 2.8 Bivariate Linear regression ----
 #====================#
 
 # fit a model
-fit.1 = lm(sysBP ~ age, data = dat)
+fit1 = lm(sysBP ~ age, data = dat)
+
 # show summary results
-summary(fit.1)
+summary(fit1)
+
 # compute 95% confidence intervalls
-confint(fit.1)
+confint(fit1)
 
 # We can now add the regression line to the scatter plot
 # plot(x = dat$age, y = dat$sysBP)
-abline(fit.1, col = "red", lwd = 5)
+abline(fit1, col = "orange", lwd = 2)
 
 # extract model coefficients
-fit.1$coefficients
-# Use coefficients to make predictions
-fit.1$coefficients[1] + 50 * fit.1$coefficients[2]
-# or use the 'predict' function for this:
-# predict(fit.1, newdata = data.frame(age=40))
+fit1$coefficients
 
+# Use coefficients to make predictions
+fit1$coefficients[1] + 50 * fit1$coefficients[2]
+
+# or use the 'predict' function for this:
+# predict(fit1, newdata = data.frame(age=50))
+
+
+#====================#
+# 2.9 Multivariable linear regression ----
+#====================#
 # Number of males and females in the data set
 table(dat$sex)
 
@@ -311,214 +377,315 @@ mean(dat$sysBP[dat$sex=="male"])
 # indeed it seems, no difference
 
 # multivariate regression
-fit.multi = lm(sysBP ~ age + sex, data = dat)
-summary(fit.multi)
+fit_multi = lm(sysBP ~ age + sex, data = dat)
+summary(fit_multi)
 
 # regressions seems to confirm this: 
 # no difference in blood pressure between males and females?
 
-#=====================#
-# Exercise 2 
-#=====================#
+fit_interaction = lm(sysBP ~ age * sex, data = dat)
+summary(fit_interaction)
 
-# clear environment
-rm(list = ls())
+# illustrate results
+fit_interaction = lm(sysBP ~ BMI , data = dat)
+summary(fit_interaction)
 
-# read in the data from GitHub
-df_gapminder <- read.csv(file = "https://raw.githubusercontent.com/ScHARR-PHEDS/R4ScHARR/master/data/df_gapminder.csv")
 
-# if this file was on my computer I would need to specify the file relative to the working directory I am in:
-# df_gapminder <- read.csv(file = "data/df_gapminder.csv")
+# EXERCISE: is BMI a risk factor for high blood pressue?
+# 1. Create a scatter plot for sysBP ~ BMI
+# 2. fit a linear regression and check results
+# 3. add the regression line to the scatter plot
+# 4. does BMI increase the risk of high BP independant of age and sex?
 
-# lets look at the start of the data-set
-head(df_gapminder)
+# SOLUTION:
+# 1
+plot(dat$BMI,dat$sysBP)
+# 2
+fit2 = lm(sysBP ~ BMI, dat)
+summary(fit2)
+# 3
+abline(fit2, col = "purple", lwd = 2)
+# 4
+fit_multi2 = lm(sysBP ~ BMI + age * sex, dat)
+summary(fit_multi2)
 
-# now lets see some basic summary stats:
-str(df_gapminder)
-summary(df_gapminder)
 
-# lets see just data from 2007
-df_2007 <- df_gapminder[df_gapminder$year == 2007,]
-head(df_2007)
 
-# lets see just data from 1952
-df_1952 <- df_gapminder[df_gapminder$year == 1952,]
-head(df_1952)
+#====================#
+# 2.10 logistic regression ----
+#====================#
 
-# which country had the highest GDPpc in 2007?
-# THIS WILL THROW AN ERROR - WE CAN GOOGLE UP THE ERROR MESSAGE.
-df_2007[which.max(df_2007$gdpPercap),]
-# https://stackoverflow.com/questions/19205806/undefined-columns-selected-when-subsetting-data-frame
+# people with CHD seem to have a higher sys BP
+boxplot(dat$sysBP ~ dat$TenYearCHD)
 
-#============== QUESTION =======
-# which country had the highest GDPpc in 1952?
-# df_1952[which.max(df_1952$gdpPercap),]
+by(dat$sysBP,dat$TenYearCHD,mean)
+# mean(dat$sysBP[dat$TenYearCHD == 1])
+# mean(dat$sysBP[dat$TenYearCHD == 0])
 
-#============== QUESTION =======
-# which country had the longest life expectancy in 2007?
-# df_2007[which.max(df_2007$lifeExp),]
+# fitting a logistic regression model using the 'glm' function
+?glm
+fit_log = glm(TenYearCHD ~ sysBP, family = binomial(link = "logit"), data = dat)
+summary(fit_log)
 
-# lets create a simple scatter plot for GDPpc & life expectancy in 2007
-plot(x = df_2007$gdpPercap,
-     y = df_2007$lifeExp,
-     type = "p",
-     xlab = "GDP per Capita ($)",
-     ylab = "Life Expectancy",
-     main = "Life Expectancy and GDP per capita in 2007"
+# extract coefficients and 95% CI
+fit_log$coefficients
+confint(fit_log)
+
+# exponentiate (un-log) to get odds ratio
+exp(fit_log$coefficients[2])
+exp(confint(fit_log)[2,])
+
+# what is the risk of CHD for a person with a sysBP of 180?
+predict(fit_log, newdata = data.frame(sysBP = 180)) 
+# this does not give us what we want
+
+# we need ti specify: type = "response"
+predict(fit_log, newdata = data.frame(sysBP = 180), type = "response")
+
+# visualising the result
+# create new data set for predictions
+new_sysBP <- data.frame(sysBP = seq(from = min(dat$sysBP), to = max(dat$sysBP), by = 1))
+new_sysBP
+
+# use fitted model to predict probabilities of CHD
+new_sysBP$CHD_risk = predict(fit_log, new_sysBP, type="response")
+
+# let's use different colors for TenYearCHD yes/no
+dot_color = ifelse(dat$TenYearCHD == 1, "orange", "blue")
+dot_color
+
+# plot logistic regression curve
+# scatter plot
+plot(
+  x = dat$sysBP, 
+  y = dat$TenYearCHD,
+  col = dot_color,
+  xlab = "Systolic BP (mmHg)",
+  ylab = "10 year risk of chronic heart disease"
+  )
+# add prediction curve
+lines(
+  x = new_sysBP$sysBP, 
+  y = new_sysBP$CHD_risk, 
+  lwd=2, lty = 2,
+  col = "orange")
+
+# add some grid lines
+abline(h = c(0.2, 0.4,0.6,0.8,1), col = "gray", lwd = 0.5)
+abline(v = c(100,120,140, 160,180), col = "gray", lwd = 0.5)
+
+# add figure caption
+title("Figure 1: association between sys BP and 10 year risk of CHD")
+
+
+# EXERCISE: practice logistic regression
+  # does the relationship between sysBP and risk of CHD 
+  # differ by sex?
+  # 1. fit a log. regression model with sysBP + sex
+  # 2. predict the risk of CHD for a range of sysBP for males and females separately
+  # 3. visualise the results in one plot
+
+
+# SOLUTION
+# 1
+fit_log2 = glm(TenYearCHD ~ sysBP+sex, family = binomial(link = "logit"), data = dat)
+summary(fit_log2)
+
+# 2
+new_sysBP_m <- data.frame(
+  sysBP = seq(from = min(dat$sysBP), to = max(dat$sysBP), by = 1),
+  sex = "male"
+  )
+new_sysBP_f <- data.frame(
+  sysBP = seq(from = min(dat$sysBP), to = max(dat$sysBP), by = 1),
+  sex = "female"
 )
 
-#============== QUESTION =======
-# Can we recreate the plot for 1952?
-plot(x = df_1952$gdpPercap,
-     y = df_1952$lifeExp,
-     type = "p",
-     xlab = "GDP per Capita ($)",
-     ylab = "Life Expectancy",
-     main = "Life Expectancy and GDP per capita in 2007"
+new_sysBP_m$CHD_risk = predict(fit_log2, new_sysBP_m, type="response")
+new_sysBP_f$CHD_risk = predict(fit_log2, new_sysBP_f, type="response")
+
+
+# 3
+dot_color2 = ifelse(dat$sex == "female", "purple", "green")
+
+plot(
+  x = dat$sysBP, 
+  y = dat$TenYearCHD,
+  col = dot_color2,
+  xlab = "Systolic BP (mmHg)",
+  ylab = "10 year risk of chronic heart disease"
 )
 
-#there is a problem, can we remove the outlier?
-df_plot <- df_1952[-which.max(df_1952$gdpPercap),]
+# add some grid lines
+abline(h = c(0.2, 0.4,0.6,0.8,1), col = "gray", lwd = 0.5)
+abline(v = c(100,120,140, 160,180), col = "gray", lwd = 0.5)
 
-plot(x = df_plot$gdpPercap,
-     y = df_plot$lifeExp,
-     type = "p",
-     xlab = "GDP per Capita ($)",
-     ylab = "Life Expectancy",
-     main = "Life Expectancy and GDP per capita in 1952"
+
+# predicted risk females
+lines(
+  x = new_sysBP_m$sysBP, 
+  y = new_sysBP_m$CHD_risk, 
+  lwd=2, lty = 2,
+  col = "green"
+  )
+
+#  predicted risk males
+lines(
+  x = new_sysBP_f$sysBP, 
+  y = new_sysBP_f$CHD_risk, 
+  lwd=2, lty = 3,
+  col = "purple"
 )
 
-#### these plots are very basic ... is there a more fancy plot than base R plot.
+# add figure caption
+title("Figure 2: association between sys BP and 10 year risk of CHD by sex")
+
+# add legend
+legend(x = 100, y = 0.5, c("males","females"), col = c("green","purple"), pch=1)
+
+
+
+
+
+# 2.11 EXCURSION: ggplot2  ------
+
+# plot(...) is a basic R function
+# there are much more fancy ways to visualise your data
+# commpnly used packages include plotly, latticem highcharterm, ggplot2
 
 #install.packages(ggplot2)
 library(ggplot2)
-head(df_gapminder)
 
-# a help file exists within the ggplot package.
+## a help file exists within the ggplot package.
 # help(ggplot2)
+## gallery with examples + code
+# https://www.r-graph-gallery.com/index.html
 
 
-# we can use ggplot as above.
-ggplot(data = df_gapminder[df_gapminder$year %in% 1952,],
-       aes(x = gdpPercap, y = lifeExp))+
-  geom_point()+
-  labs(title = "Life Expectancy and GDP per capita in 1952",
-       x = "GDP per Capita ($)",
-       y = "Life Expectancy")
+# 1 basic scatter plot
+ggplot(dat, aes(x = age, y = sysBP)) +
+  geom_point()
 
-# but we can change sizes to represent populations
-ggplot(data = df_gapminder[df_gapminder$year %in% c(1952),],
-       aes(x = gdpPercap, y = lifeExp, size = pop))+
-  geom_point()+
-  labs(title = "Life Expectancy and GDP per capita in 1952",
-       x = "GDP per Capita ($)",
-       y = "Life Expectancy")
-
-# and add in colors to represent continents
-ggplot(data = df_gapminder[df_gapminder$year %in% c(1952),],
-       aes(x = gdpPercap, y = lifeExp, size = pop, col = continent))+
-  geom_point()+
-  labs(title = "Life Expectancy and GDP per capita in 1952",
-       x = "GDP per Capita ($)",
-       y = "Life Expectancy")
-
-# and put two plots together to show the change from 1952 to 2007
-ggplot(data = df_gapminder[df_gapminder$year %in% c(1952,2007),],
-       aes(x = gdpPercap, y = lifeExp, col = continent,size = pop))+
-  geom_point()+
-  labs(title = "Life Expectancy and GDP per capita in 1952",
-       x = "GDP per Capita ($)",
-       y = "Life Expectancy")+
-  facet_grid(~year)
+# 2 minimal theme
+ggplot(dat, aes(x = age, y = sysBP)) +
+  geom_point() +
+  theme_minimal()
 
 
-# the gdp data is not very uniformly distributed, 
-# lot of poorer countries and a few rich ones.
-hist(df_gapminder[df_gapminder$year %in% c(2007),"gdpPercap"])
+# 3 colorise by sex 
+ggplot(dat, aes(x = age, y = sysBP, col = sex)) +
+  geom_point() +
+  theme_minimal()
 
-# how can we change the scale of the x axis?
-# LOOK THIS UP - DON'T KNOW IT OFF TOP OF HEAD.
-# cheatsheet: https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
-# stack overflow: https://stackoverflow.com/questions/47890742/logarithmic-scale-plot-in-r
+# 4 place legend on bottom
+ggplot(dat, aes(x = age, y = sysBP, col = sex)) +
+  geom_point() +
+  theme_minimal() +
+  theme(legend.position = "bottom")
 
-# can therefore change the x axis to be on a log scale
-ggplot(data = df_gapminder[df_gapminder$year %in% c(1952,2007),],
-       aes(x = gdpPercap, y = lifeExp, col = continent,size = pop))+
-  geom_point()+
-  scale_x_log10()+
-  labs(title = "Life Expectancy and GDP per capita in 1952",
-       x = "GDP per Capita ($)",
-       y = "Life Expectancy")+
-  facet_grid(~year) 
+# 5 change colors
+ggplot(dat, aes(x = age, y = sysBP, col = sex)) +
+  geom_point() +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  scale_color_manual(
+    values = c("purple","darkgreen"),
+    labels =  c("Female","Male"),
+    name = "Sex"
+    ) 
 
-# can also change the theme to classic
-ggplot(data = df_gapminder[df_gapminder$year %in% c(1952,2007),],
-       aes(x = gdpPercap, y = lifeExp, col = continent,size = pop))+
-  geom_point()+
-  scale_x_log10()+
-  labs(title = "Life Expectancy and GDP per capita in 1952",
-       x = "GDP per Capita ($)",
-       y = "Life Expectancy")+
-  theme_classic() + 
-  facet_grid(~year) 
+# 6 labels + title
+ggplot(dat, aes(x = age, y = sysBP, col = sex)) +
+  geom_point() +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  scale_color_manual(
+    values = c("purple","darkgreen"),
+    labels =  c("Female","Male"),
+    name = "Sex"
+  )  +
+  xlab("Age")  +
+  ylab("Systolic BP (mmHG)") +
+  ggtitle(
+    label = "Association between age and systolic BP", 
+    subtitle = "Data: Framingham study"
+    ) 
 
-# we can store ggplot plots as objects
-plot1 <- ggplot(data = df_gapminder[df_gapminder$year %in% c(1952,2007),],
-                aes(x = gdpPercap, y = lifeExp, col = continent,size = pop))+
-  geom_point()+
-  scale_x_log10()+
-  labs(title = "Life Expectancy and GDP per capita in 1952",
-       x = "GDP per Capita ($)",
-       y = "Life Expectancy")+
-  theme_classic() + 
-  facet_grid(~year) 
+# 7 add regression line
+ggplot(dat, aes(x = age, y = sysBP, col = sex)) +
+  geom_point() +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  scale_color_manual(
+    values = c("purple","darkgreen"),
+    labels =  c("Female","Male"),
+    name = "Sex"
+  )  +
+  xlab("Age")  +
+  ylab("Systolic BP (mmHG)") +
+  ggtitle(
+    label = "Association between age and systolic BP", 
+    subtitle = "Data: Framingham study"
+  ) +
+  geom_smooth(method = "lm", se = F)
 
-ggsave(plot = plot1,
-       filename = "outputs/gapminderplot.png")
+# 8 facets
+ggplot(dat, aes(x = age, y = sysBP, col = sex)) +
+  geom_point() +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  scale_color_manual(
+    values = c("purple","darkgreen"),
+    labels =  c("Female","Male"),
+    name = "Sex"
+  )  +
+  xlab("Age")  +
+  ylab("Systolic BP (mmHG)") +
+  ggtitle(
+    label = "Association between age and systolic BP", 
+    subtitle = "Data: Framingham study"
+  )  +
+  geom_smooth(method = "lm", se = F) +
+  facet_wrap(~sex, ncol = 2)
+
+# 9 store in object
+my_plot = ggplot(dat, aes(x = age, y = sysBP, col = sex)) +
+  geom_point() +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  scale_color_manual(
+    values = c("purple","darkgreen"),
+    labels =  c("Female","Male"),
+    name = "Sex"
+  )  +
+  xlab("Age")  +
+  ylab("Systolic BP (mmHG)") +
+  ggtitle(
+    label = "Association between age and systolic BP", 
+    subtitle = "Data: Framingham study"
+  )  +
+  geom_smooth(method = "lm", se = F) +
+  facet_wrap(~sex, ncol = 2)
 
 
-#========================================================#
-# create an animation - this is cool, but no need to repeat.
+my_plot
 
-rm(list = ls())
-# install.packages("gganimate")
-# this is a development version of gganimate (currently in production)
-# devtools::install_github('thomasp85/gganimate')
+# 10 manipulate obj
+my_plot <- my_plot + 
+  theme(legend.position = "none")
+my_plot
 
-library(gganimate)
-#library(gapminder)
+# 11 save plot
+ggsave(my_plot, filename = "./output/my_plot.png", width = 7, height = 5, bg = "white")
+  
+# . -------------  
 
-df_gapminder <- read.csv("https://raw.githubusercontent.com/ScHARR-PHEDS/R4ScHARR/master/data/df_gapminder.csv")
 
-theme_set(theme_bw())
 
-# a single animation plot
-ggplot(data = df_gapminder,
-       aes(x = gdpPercap, y=lifeExp, size = pop, colour = country)) +
-  geom_point(show.legend = FALSE, alpha = 0.7) +
-  scale_color_viridis_d() +
-  scale_size(range = c(2, 12)) +
-  scale_x_log10() +
-  labs(x = "GDP per capita ($)", y = "Life expectancy")+
-  # animation specific
-  transition_time(year) +
-  labs(title = 'Year: {frame_time}',x = 'GDP per capita', y = 'life expectancy')
 
-# with a facet
-ggplot(df_gapminder, 
-       aes(gdpPercap, lifeExp, size = pop, colour = country)) +
-  geom_point(alpha = 0.7, show.legend = FALSE) +
-  scale_colour_manual(values = country_colors) +
-  scale_size(range = c(2, 12)) +
-  scale_x_log10() +
-  facet_wrap(~continent) +
-  # Here comes the gganimate specific bits
-  labs(title = 'Year: {frame_time}', x = 'GDP per capita', y = 'life expectancy') +
-  transition_time(year) +
-  ease_aes('linear')
 
 #=============#
-# Day 2 Session 2 
+# DAY 2 ------
 #=============#
 
 
@@ -626,14 +793,20 @@ f_simple
 f_simple(1,2,3)
 f_simple(6,5,12)
 
-# Try creating a function: Create a function that calculates the difference 
-# between the maximum & mean of the three numbers (x, y, z) and returns a single number.
 
-#This is useful for PSA inputs for health economic modelling, for example:
+# EXERCISE: Try creating a function
+  # Create a function that calculates the difference 
+  # between the maximum & mean of the three numbers (x, y, z) 
+  # and returns a single number.
+
+
+# Custom functions are useful for PSA inputs for health 
+# economic modelling, for example:
 
 f_gen_psa <- function(n_sim = 1000){
   
-  # creating a vector with values drawn from the beta distribution with the two parameters
+  # creating a vector with values drawn from the beta 
+  # distribution with the two parameters
       param1   = rbeta(n = n_sim,
                     shape1 =  30,
                     shape2 =  170)
@@ -657,7 +830,8 @@ f_gen_psa <- function(n_sim = 1000){
                     shape1 =  30,
                     shape2 =  170),
     
-    # added a column with values drawn from the trucated normal distribution with the two parameters
+    # added a column with values drawn from the trucated 
+    # normal distribution with the two parameters
     param2   = rtruncnorm(n = n_sim, 
                        mean = 1, 
                        sd = 0.01, 
@@ -669,6 +843,29 @@ f_gen_psa <- function(n_sim = 1000){
 
 f_gen_psa(n_sim = 5)
 
+# EXERCISE: Create a probabilistic function
+# Çreate a function 'flipCoin' that takes 'n' ar an argument and
+# simulates flipping a coin n times 
+# AND/OR 
+# create a function 'throwDice' that takes 'k' and 'n' as arguments and
+# simulates throwing a dice with k sides n times 
+# 
+# (HINT: consider using the 'sample' function with replace = T)
+# ?sample
+
+
+# SOLUTIONS
+flipCoin = function(n){
+  res = sample(x = c("heads","tails"), size = n, replace = T)
+  return(res)
+}
+
+trowDice = function(k, n){
+  res = sample(x = 1:k, size = n, replace = T)
+  return(res)
+}
+
+
 #====================#
 # R Markdown  ----
 #====================#
@@ -676,8 +873,13 @@ f_gen_psa(n_sim = 5)
 install.packages(rmarkdown)
 tinytex::install_tinytex()
 
+# . -------
+
+
+
+
 #=============#
-# Day 3 Session 1 
+# DAY 3  -----
 #=============#
 
 # Matrix multiplication example
