@@ -1,0 +1,66 @@
+---
+title: 'R markdown: A tutorial'
+author: "Paul Schneider & Sarah Bates"
+date: "18/01/2022"
+output: 'html_document'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Excercise
+
+1. Change the format to html
+2. Use subsetting to present the results from one country only
+3. Include the table in the report. See if you can present the columns year, lifeExp, pop and gdpPercap only
+
+# Dataframe
+
+```{r, echo = F}
+
+df_gapminder <- read.csv(file = "https://raw.githubusercontent.com/ScHARR-PHEDS/R4ScHARR/master/data/df_gapminder.csv")
+
+#Subset to United Kingdom only
+df_UK <- df_gapminder[df_gapminder$country == "United Kingdom",]
+
+#subset to columns of interest
+df_UK<-df_UK[,c("year", "lifeExp","pop", "gdpPercap")]  
+
+# remove rownames
+rownames(df_UK) <- c()
+
+df_UK
+```
+
+
+## Including Plots
+
+4. Add a plot with population over time in that country
+5. Change the code so that the code chunk can't be seen in the report
+
+```{r, echo=F, message=FALSE, warning = FALSE}
+
+
+# Plot these on a line graph
+library(ggplot2)
+
+# line graph of population against year
+ggplot(data=df_UK, aes(x=year, y=pop)) +
+  geom_line()+
+  geom_point()
+
+
+```
+
+##
+
+5. Report the change in population between the year 1957 and 2007
+
+The population has increased by `r toString(df_UK[12, "pop"] - df_UK[2,"pop"])` between the years 1957 and 2007.
+
+The population has increased by `r toString(df_UK$pop[df_UK$year==2007] - df_UK$pop[df_UK$year==1957])` between the years 1957 and 2007.
+
+
+
+

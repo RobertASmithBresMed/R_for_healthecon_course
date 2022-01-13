@@ -1,7 +1,7 @@
 #=============#
 # Intro to R for Health Economics
 # Paul Schneider & Sarah Bates
-# Day 1 Session 1 
+# Day 1 
 #=============#
 
 rm(list = ls())
@@ -18,7 +18,6 @@ rm(list = ls())
 3*7
 # 10 to the power 3
 10^3
-# root isn't a basic operation so we will look at this later.
 
 # order of operations:
 5*6+2
@@ -104,9 +103,27 @@ b
 # Quick practice ----
 #====================#
 
-# I Create an object foo and set it to be 8
-# II Create another object bar, and set it to be 7
-# III Is foo divided by bar greater than 1.14 ?
+# Create an object d equal to 10.
+
+# Divide d by 5.
+
+# Overwrite d, let it now be equal to 20, and ???print??? d, to see the results
+
+# Overwrite d (which is now 20) with 4 times d, and print d top see the result
+
+# Overwrite d (which is now 80), with d times d, and print the result
+
+# Create a new object A and set it equal to 3
+
+# Create another new object res, let it be the product of d and A, and output the result
+
+# Finally, take the average of d, A and res
+
+# If you have time...
+
+# Create an object foo and set it to be 8
+# Create another object bar, and set it to be 7
+# Is foo divided by bar greater than 1.14 ?
 
 #====================#
 # Object Classes ----
@@ -186,12 +203,48 @@ df[!min_height,]
 # Exercise 1 
 #=====================#
 
+dat = read.table(text=
+                   "height weight first_name sex      bmi
+                    1   1.38     31      Alice   F 16.27809
+                    2   1.45     35        Bob   M 16.64685
+                    3   1.21     28      Harry   M 19.12438
+                    4   1.56     40       Jane   F 16.43655")
+
+
+# 1.Select the 3rd row from the data frame dat
+
+# 2.Select the weight variable from the data frame using your preferred method.
+##Info: Remember, there are multiple ways to do this: you can use the $ to index the right column, or use the [ , ] with a number or a “variable_name”.
+
+# 3.Select Alice’s data from the data frame.
+##Info: It might be helpful to type in dat and press  . to check which row Alice’s data is in.
+
+# 4.Print dat without it’s first row
+##Info: You can select rows 2,3, and 4, but you can also show everything except row 1 - try the latter approach.
+
+# 5.Subset the data frame to show just the data for the females
+##Info: Remember, F (=FALSE) and "F" (= F as a character) have different meanings in R.
+
+# 6. Create a vector primes with elements 2,3,5,7, and 11.
+##Info: You can combine elements into a vector with the c(element_1, element_2,...) command.
+
+# 7. Print all primes that are larger than or equal to 5 using subsetting.
+
+# 8. Create an ‘animal top speed data frame’: speed_dat. It should have three columns, named animal, speed, flying, and should contain the following information:
+
+#The "lion" can run 80km/h, it’s not flying.
+#The "marlin" can swim 129km/h, it’s also not flying.
+#Finally, the "eagle" can do 240km/h, and of course it’s flying.
+
+#Info 1: The vector flying should be set to TRUE or FALSE.
+#Info 2: Use data.frame(vector_1, vector_2,...) to combine multiple vectors into a data frame.
+
 #=====================#
-# Session 2
+# Data analysis
 #=====================#
 
 #=============
-# Check your R enviroment  -----
+# Check your R environment  -----
 #=============
 
 # check
@@ -320,6 +373,45 @@ summary(fit.multi)
 #=====================#
 # Exercise 2 
 #=====================#
+
+# 1. check your enviroment
+ls()
+
+# 2. clear old df 
+rm(list = ls())
+
+# 3. read in the data from a website 
+# dat <- read.csv("URL")
+dat <- read.csv("https://raw.githubusercontent.com/ScHARR-PHEDS/R4ScHARR/master/data/df_framingham.csv")
+
+# 4. get an overview of the dataframe using the str functiom
+
+# 5. look at the first few rows using the head function
+
+# 6. how many NAs are there in sysBP?
+
+# 7. remove all NAs and overwrite dat
+
+# 8. subset dat by sex - either select males or females
+
+# 9. what is the median sys bp in the subsetted dataframe?
+
+# 8. what is the maximum BP?
+
+# 10. what is the total range of BP values, i.e. the difference between the highest and the lowest?
+
+# 11. plot a histogram of BP in males/females
+
+# 12. plot the relationship between age and BP
+
+# 13. fit a linear regression model and assign it to an object called fit_m,
+# and use summary(model) to show results
+
+# 14. add regression line to plot
+
+# 15. what is the predicted BP in a 40 year old? 
+
+######
 
 # clear environment
 rm(list = ls())
@@ -518,8 +610,31 @@ ggplot(df_gapminder,
   ease_aes('linear')
 
 #=============#
-# Day 2 Session 2 
+# Day 2 
 #=============#
+
+#====================#
+# R Markdown  ----
+#====================#
+
+install.packages(rmarkdown)
+tinytex::install_tinytex()
+
+#=====================#
+# Rmarkdown Exercise 1
+#=====================#
+
+# 1. Change the format to html
+
+# 2. Use subsetting to present the results from one country only
+
+# 3. Include the table in the report. See if you can present the columns year, lifeExp, pop and gdpPercap only
+
+# 4. Add a plot with population over time in that country
+
+# 5. Change the code so that the code chunk can't be seen in the report
+
+# 6. Report the change in population between the year 1957 and 2007
 
 
 #====================#
@@ -560,6 +675,18 @@ for(i in 1:ncol(df)) {
   colnames(df)[i] <- paste0("Var_", i)              
 }
 
+#====================#
+# Quick practice ----
+#====================#
+
+# create a for loop to create the first 10 values of the fibonachi sequence (each value the sum of the last)
+
+n <- 10
+fib <- numeric(n)
+fib[1] <- 1
+fib[2] <- 1
+
+
 # for loops are useful in modeling because we can can use them to simulate change over time
 
 # We add an age column to df
@@ -591,6 +718,21 @@ df_year
 ggplot(data=df_year, aes(x=age, y=bmi, group=first_name)) +
   geom_line(aes(linetype=first_name))+
   geom_point(aes(shape=first_name))
+
+#====================#
+# Quick practice ----
+#====================#
+
+m_P <- matrix(data = NA,
+              nrow = 3, 
+              ncol = 3,
+              dimnames = list(c("H", "S","D"), c("H", "S","D")))
+
+m_P["H", ]  <- c(0.9,0.25,0.05)
+m_P["S", ]  <- c(0.3,0.5,0.2)
+m_P["D", ]  <- c(0,0,1)
+
+# Using for loop, check if each row sums to 1
 
 
 #====================#
@@ -626,8 +768,13 @@ f_simple
 f_simple(1,2,3)
 f_simple(6,5,12)
 
+#====================#
+# Quick practice ----
+#====================#
+
 # Try creating a function: Create a function that calculates the difference 
 # between the maximum & mean of the three numbers (x, y, z) and returns a single number.
+
 
 #This is useful for PSA inputs for health economic modelling, for example:
 
@@ -669,12 +816,36 @@ f_gen_psa <- function(n_sim = 1000){
 
 f_gen_psa(n_sim = 5)
 
-#====================#
-# R Markdown  ----
-#====================#
 
-install.packages(rmarkdown)
-tinytex::install_tinytex()
+#=====================#
+# Rmarkdown Exercise 2
+#=====================#
+
+# Create an R markdown report using the previous exercise as a template
+
+# 1. Subset the data frame to a single year
+
+# 2. Use a for loop to identify the mean life expectancy for each continent
+
+# The function unique can be used to identify the unique value in a column
+continents <- c(unique(df_2007$continent))
+
+for (i in continents){
+  
+  
+}
+
+# 3. Create a custom function that present the mean GDP per capita for a certain continent and year.
+
+f_gdpPercap <- function(continent, year){
+  
+  
+}
+
+# 4. Use this function to print the mean GDP for each continent in year you previously selected
+
+# 5. Add text that identifies the highest life expectancy and highest GDP per capita in the year you selected
+
 
 #=============#
 # Day 3 Session 1 

@@ -1,0 +1,85 @@
+---
+title: 'R markdown: A tutorial'
+author: "Paul Schneider & Sarah Bates"
+date: "18/01/2022"
+output: 'html_document'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Excercise
+
+
+# Average Life expectancy
+
+```{r, echo = F}
+
+df_gapminder <- read.csv(file = "https://raw.githubusercontent.com/ScHARR-PHEDS/R4ScHARR/master/data/df_gapminder.csv")
+
+# 1. Subset the data frame to a single year
+
+df_2007 <- df_gapminder[df_gapminder$year == 2007,]
+
+# 2. Use a for loop to identify the mean life expectancy for each continent
+
+# The function unique can be used to identify the unique value in a column
+continents <- c(unique(df_2007$continent))
+
+for (i in continents){
+  
+  df_x <- df_2007[df_2007$continent  == i, ]
+
+  df_mean <- data.frame(i, mean(df_x$lifeExp)) 
+  
+  names(df_mean)<- NULL
+  
+  print(df_mean)
+                                             
+}
+
+```
+
+
+## Average GDP
+
+```{r, echo=F, message=FALSE, warning = FALSE}
+
+
+# 3. Create a custom function that present the mean GDP per capita for a certain continent and year.
+
+f_gdpPercap <- function(continent, year){
+  
+  df_year <- df_gapminder[df_gapminder$year == year,]
+  
+  df_continent <- df_year[df_year$continent  == continent, ]
+  
+  df_mean <- data.frame(continent, Mean_GDP = (mean(df_continent$gdpPercap)))
+
+  print(df_mean)
+    
+}
+
+# 4. Use this function to print the mean GDP for each continent in year you previously selected
+
+f_gdpPercap("Asia", 2007)
+f_gdpPercap("Europe", 2007)
+f_gdpPercap("Africa", 2007)
+f_gdpPercap("Americas", 2007)
+f_gdpPercap("Oceania", 2007)
+
+
+```
+
+## Maximum values
+
+5. Add text that identifies the highest life expectancy and highest GDP per capita in the year you selected
+
+The highest life expectancy was `r toString(max(df_2007$lifeExp))` in `r toString(df_2007$country[df_2007$lifeExp==max(df_2007$lifeExp)])`.
+
+The highest GDP per capita was `r toString(max(df_2007$gdpPercap))` in `r toString(df_2007$country[df_2007$gdpPercap==max(df_2007$gdpPercap)])`.
+
+
+
+

@@ -1,0 +1,49 @@
+---
+title: 'R markdown: A tutorial'
+author: "Paul Schneider & Sarah Bates"
+date: "18/01/2022"
+output: 'pdf_document'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Excercise
+
+1. Change the format to html
+2. Use subsetting to present the results from one country only
+3. Include the table in the report. See if you can present the columns year, lifeExp, pop and gdpPercap only
+
+# Dataframe
+
+```{r, echo = F}
+
+df_gapminder <- read.csv(file = "https://raw.githubusercontent.com/ScHARR-PHEDS/R4ScHARR/master/data/df_gapminder.csv")
+
+
+```
+
+
+## Including Plots
+
+4. Add a plot with population over time in that country
+5. Change the code so that the code chunk can't be seen in the report
+
+```{r, echo=T, message=FALSE, warning = FALSE}
+
+
+# load ggplot from library if using
+library(ggplot2)
+
+
+
+```
+
+##
+
+6. Report the change in population between the year 1957 and 2007
+
+
+
+
