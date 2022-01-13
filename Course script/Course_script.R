@@ -266,7 +266,7 @@ ls()
 dat <- read.csv("./data/df_framingham.csv")
 
 ## Downloading files from the internet
-dat <- read.csv("https://raw.githubusercontent.com/ScHARR-PHEDS/R4ScHARR/master/data/df_framingham.csv")
+dat <- read.csv("https://raw.githubusercontent.com/bitowaqr/R_for_healthecon_course/main/data/df_framingham.csv")
 
 
 #====================#
@@ -415,7 +415,7 @@ fit_interaction = lm(sysBP ~ BMI , data = dat)
 summary(fit_interaction)
 
 
-# EXERCISE: 
+# EXERCISE: is BMI a risk factor for high blood pressue?
 # 1. check your enviroment
 ls()
 
@@ -424,7 +424,7 @@ rm(list = ls())
 
 # 3. read in the data from a website 
 # dat <- read.csv("URL")
-dat <- read.csv("https://raw.githubusercontent.com/ScHARR-PHEDS/R4ScHARR/master/data/df_framingham.csv")
+dat <- read.csv("https://raw.githubusercontent.com/bitowaqr/R_for_healthecon_course/main/data/df_framingham.csv")
 
 # 4. get an overview of the dataframe using the str functiom
 
@@ -432,49 +432,62 @@ dat <- read.csv("https://raw.githubusercontent.com/ScHARR-PHEDS/R4ScHARR/master/
 
 # 6. how many NAs are there in sysBP?
 
-# 7. remove all NAs and overwrite dat
+# 7. remove all rows which contain NAs
 
-# 8. subset dat by sex - either select males or females
+# 8. what is the median BMI?
 
-# 9. what is the median sys bp in the subsetted dataframe?
+# 9. what is the maximum BMI?
 
-# 8. what is the maximum BP?
+# 10. plot the relationship between BMI and sysBP
 
-# 10. what is the total range of BP values, i.e. the difference between the highest and the lowest?
+# 11. fit a linear regression model to assess the association between
+# BMI and sysBP, assign it to an object called fit2,
+# and use summary(...) to show results
 
-# 11. plot a histogram of BP in males/females
+# 12. add regression line to plot 
 
-# 12. plot the relationship between age and BP
-
-# 13. fit a linear regression model and assign it to an object called fit_m,
-# and use summary(model) to show results
-
-# 14. add regression line to plot
-
-# 15. what is the predicted BP in a 40 year old? 
+# 13. does BMI increase the risk of high BP independent of age and sex?
 
 ######
 
-# clear environment
-rm(list = ls())
-
-# EXERCISE: is BMI a risk factor for high blood pressue?
-# 1. Create a scatter plot for sysBP ~ BMI
-# 2. fit a linear regression and check results
-# 3. add the regression line to the scatter plot
-# 4. does BMI increase the risk of high BP independant of age and sex?
 
 # SOLUTION:
-# 1
+
+# 4. get an overview of the dataframe using the str functiom
+str(dat)
+
+# 5. look at the first few rows using the head function
+head(dat)
+
+# 6. how many NAs are there in sysBP?
+sum(is.na(dat$sysBP))
+
+# 7. remove all rows which contain NAs
+dat =  dat[complete.cases(dat),]
+
+# 8. what is the median BMI?
+median(dat$BMI)
+
+# 9. what is the maximum BMI?
+max(dat$BMI)
+
+# 10. plot the relationship between BMI and sysBP
 plot(dat$BMI,dat$sysBP)
-# 2
+
+# 11. fit a linear regression model to assess the association between
+# BMI and sysBP, assign it to an object called fit2,
+# and use summary(...) to show results
 fit2 = lm(sysBP ~ BMI, dat)
 summary(fit2)
-# 3
+
+# 12. add regression line to plot 
 abline(fit2, col = "purple", lwd = 2)
-# 4
+
+# 13. does BMI increase the risk of high BP independent of age and sex?
 fit_multi2 = lm(sysBP ~ BMI + age * sex, dat)
 summary(fit_multi2)
+
+
 
 #====================#
 # 2.10 logistic regression ----
@@ -543,6 +556,7 @@ abline(v = c(100,120,140, 160,180), col = "gray", lwd = 0.5)
 title("Figure 1: association between sys BP and 10 year risk of CHD")
 
 
+
 # EXERCISE: practice logistic regression
   # does the relationship between sysBP and risk of CHD 
   # differ by sex?
@@ -552,11 +566,11 @@ title("Figure 1: association between sys BP and 10 year risk of CHD")
 
 
 # SOLUTION
-# 1
+# 1 fit a log. regression model with sysBP + sex
 fit_log2 = glm(TenYearCHD ~ sysBP+sex, family = binomial(link = "logit"), data = dat)
 summary(fit_log2)
 
-# 2
+# 2 predict the risk of CHD for a range of sysBP for males and females separately
 new_sysBP_m <- data.frame(
   sysBP = seq(from = min(dat$sysBP), to = max(dat$sysBP), by = 1),
   sex = "male"
@@ -570,7 +584,7 @@ new_sysBP_m$CHD_risk = predict(fit_log2, new_sysBP_m, type="response")
 new_sysBP_f$CHD_risk = predict(fit_log2, new_sysBP_f, type="response")
 
 
-# 3
+# 3 visualise the results in one plot
 dot_color2 = ifelse(dat$sex == "female", "purple", "green")
 
 plot(
@@ -607,6 +621,7 @@ title("Figure 2: association between sys BP and 10 year risk of CHD by sex")
 
 # add legend
 legend(x = 100, y = 0.5, c("males","females"), col = c("green","purple"), pch=1)
+
 
 
 
