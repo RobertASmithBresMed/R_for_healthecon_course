@@ -16,11 +16,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r, echo = F}
 
-df_gapminder <- read.csv(file = "https://raw.githubusercontent.com/ScHARR-PHEDS/R4ScHARR/master/data/df_gapminder.csv")
+df_gapminder <- read.csv(file = "https://raw.githubusercontent.com/bitowaqr/R_for_healthecon_course/main/data/df_gapminder.csv")
 
 # 1. Subset the data frame to a single year
-
-
 
 # 2. Use a for loop to identify the mean life expectancy for each continent
 
@@ -45,8 +43,13 @@ for (i in continents){
 
 f_gdpPercap <- function(continent, year){
   
+  #Subset to the year
   
-    
+  #Subset further to the continent
+
+  #calculate mean gdp (try to create a data frame with the name of the continent and
+  #the mean)
+  
 }
 
 # 4. Use this function to print the mean GDP for each continent in year you previously selected
@@ -58,7 +61,7 @@ f_gdpPercap <- function(continent, year){
 
 ## Maximum values
 
-5. Add text that identifies the highest life expectancy and highest GDP per capita in the year you selected
+5. Add text that identifies the highest life expectancy and highest GDP per capita in the year you selected (hint: use max() function)
 
 
 
