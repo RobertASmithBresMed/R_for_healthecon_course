@@ -1,9 +1,10 @@
 #=============#
 # Intro to R for Health Economics
-# Paul Schneider, Rob Smith & Sarah Bates
-# Exercise 1 
-#=============#
+# Paul Schneider & Sarah Bates
 
+# EXERCISE 2: 
+
+# Solution
 
 # 1.Select the 3rd row from the data frame dat
 

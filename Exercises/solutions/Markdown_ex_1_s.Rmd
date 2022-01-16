@@ -12,14 +12,16 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Excercise
 
 1. Change the format to html
-2. Use subsetting to present the results from one country only
-3. Include the table in the report. See if you can present the columns year, lifeExp, pop and gdpPercap only
+
 
 # Dataframe
 
 ```{r, echo = F}
 
-df_gapminder <- read.csv(file = "https://raw.githubusercontent.com/ScHARR-PHEDS/R4ScHARR/master/data/df_gapminder.csv")
+df_gapminder <- read.csv(file = "https://raw.githubusercontent.com/bitowaqr/R_for_healthecon_course/main/data/df_gapminder.csv")
+
+# 2. Use subsetting to present the results from one country only
+
 
 #Subset to United Kingdom only
 df_UK <- df_gapminder[df_gapminder$country == "United Kingdom",]
