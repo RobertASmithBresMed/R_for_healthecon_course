@@ -107,7 +107,7 @@ rm(list=ls())
 b <- 4<2
 b
 
-# EXERCISE: 
+# EXERCISE 1: 
 # 1. Create an object foo and set it to be 8
 # 2. Create another object bar, and set it to be 7
 # 3. Is foo divided by bar greater than 1.14 ?
@@ -200,7 +200,7 @@ smaller <- df$height < 1.4
 df[smaller,]
 df[!min_height,]
 
-# EXERCISE: 
+# EXERCISE 2: 
 
 dat = read.table(text=
                    "height weight first_name sex      bmi
@@ -237,6 +237,63 @@ dat = read.table(text=
 
 #Info 1: The vector flying should be set to TRUE or FALSE.
 #Info 2: Use data.frame(vector_1, vector_2,...) to combine multiple vectors into a data frame.
+
+# Solution
+
+# 1.Select the 3rd row from the data frame dat
+
+dat[3,]
+
+# 2.Select the weight variable from the data frame using your preferred method.
+##Info: Remember, there are multiple ways to do this: you can use the $ to index the right column, or use the [ , ] with a number or a “variable_name”.
+
+dat$weight 
+# or dat[,2] 
+# or dat[,"weight"]
+
+# 3.Select Alice’s data from the data frame.
+##Info: It might be helpful to type in dat and press  . to check which row Alice’s data is in.
+
+dat[1,]
+
+# 4.Print dat without it’s first row
+##Info: You can select rows 2,3, and 4, but you can also show everything except row 1 - try the latter approach.
+
+dat[-1,]
+# but you could also use:
+# dat[2:4,]
+# or
+# dat[ c(F, T, T, T), ]
+
+# 5.Subset the data frame to show just the data for the females
+##Info: Remember, F (=FALSE) and "F" (= F as a character) have different meanings in R.
+
+female <- dat$sex == "F"
+df[female,]
+
+# 6. Create a vector primes with elements 2,3,5,7, and 11.
+##Info: You can combine elements into a vector with the c(element_1, element_2,...) command.
+
+primes <- c(2,3,5,7,11)  
+
+# 7.Print all primes that are larger than or equal to 5 using subsetting.
+
+primes[primes <= 5]
+
+# 8.Create an ‘animal top speed data frame’: speed_dat. It should have three columns, named animal, speed, flying, and should contain the following information:
+
+#The "lion" can run 80km/h, it’s not flying.
+#The "marlin" can swim 129km/h, it’s also not flying.
+#Finally, the "eagle" can do 240km/h, and of course it’s flying.
+
+#Info 1: The vector flying should be set to TRUE or FALSE.
+#Info 2: Use data.frame(vector_1, vector_2,...) to combine multiple vectors into a data frame.
+
+animal <- c("lion", "marlin", "eagle")  
+speed <- c(80, 129, 240)
+flying <- c(F, F, T)
+speed_dat <- data.frame(animal, speed, flying)
+speed_dat
 
 
 #=====================#
@@ -415,8 +472,8 @@ fit_interaction = lm(sysBP ~ BMI , data = dat)
 summary(fit_interaction)
 
 
-# EXERCISE: is BMI a risk factor for high blood pressue?
-# 1. check your enviroment
+# EXERCISE 3: is BMI a risk factor for high blood pressure?
+# 1. check your environment
 ls()
 
 # 2. clear old df 
@@ -488,7 +545,6 @@ fit_multi2 = lm(sysBP ~ BMI + age * sex, dat)
 summary(fit_multi2)
 
 
-
 #====================#
 # 2.10 logistic regression ----
 #====================#
@@ -555,9 +611,7 @@ abline(v = c(100,120,140, 160,180), col = "gray", lwd = 0.5)
 # add figure caption
 title("Figure 1: association between sys BP and 10 year risk of CHD")
 
-
-
-# EXERCISE: practice logistic regression
+# EXERCISE 4: practice logistic regression
   # does the relationship between sysBP and risk of CHD 
   # differ by sex?
   # 1. fit a log. regression model with sysBP + sex
@@ -621,8 +675,6 @@ title("Figure 2: association between sys BP and 10 year risk of CHD by sex")
 
 # add legend
 legend(x = 100, y = 0.5, c("males","females"), col = c("green","purple"), pch=1)
-
-
 
 
 # 2.11 EXCURSION: ggplot2  ------
@@ -764,7 +816,7 @@ ggsave(my_plot, filename = "./output/my_plot.png", width = 7, height = 5, bg = "
 #=============#
 
 #====================#
-# R Markdown  ----
+# 3.1 R Markdown  ----
 #====================#
 
 install.packages(rmarkdown)
@@ -788,7 +840,7 @@ tinytex::install_tinytex()
 
 
 #====================#
-# For loop ----
+# 3.2 For loop ----
 #====================#
 
 # For loops can be used to repeat the same action multiple times without lots of 
@@ -826,7 +878,7 @@ for(i in 1:ncol(df)) {
 }
 
 
-## EXERCISE: 
+## EXERCISE 5: 
 
 # check if row sum to 1
 
@@ -851,7 +903,7 @@ for (i in 1:nrow(m_P)) {
 }
 
 #====================#
-# Custom functions ----
+# 3.3 Custom functions ----
 #====================#
 
 
@@ -883,10 +935,21 @@ f_simple
 f_simple(1,2,3)
 f_simple(6,5,12)
 
-# EXERCISE: Try creating a function
+# EXERCISE 6: Try creating a function
   # Create a function that calculates the difference 
   # between the maximum & mean of the three numbers (x, y, z) 
   # and returns a single number.
+
+# SOLUTION
+
+f_max_mean <- function(x,y,z){
+  
+  value = max(x,y,z)-mean(x,y,z)
+  return(value)
+  
+}
+
+f_max_mean(1,2,3)
 
 
 # Custom functions are useful for PSA inputs for health 
@@ -932,8 +995,8 @@ f_gen_psa <- function(n_sim = 1000){
 
 f_gen_psa(n_sim = 5)
 
-# EXERCISE: Create a probabilistic function
-# Çreate a function 'flipCoin' that takes 'n' ar an argument and
+# EXERCISE 7: Create a probabilistic function
+# Create a function 'flipCoin' that takes 'n' ar an argument and
 # simulates flipping a coin n times 
 # AND/OR 
 # create a function 'throwDice' that takes 'k' and 'n' as arguments and
@@ -1022,6 +1085,19 @@ p_S1S2  <- 0.105         	 # probability to become sicker when sick
 hr_S1   <- 3             	 # hazard ratio of death in sick vs healthy
 hr_S2   <- 10            	 # hazard ratio of death in sicker vs healthy 
 
+# EXERCISE 8
+ # 1. Set up remaining inputs
+ #-------------------------
+ # Costs c_:
+ # Healthy Sick Sicker Dead Treatment
+ # 2000    4000 15000  0    12000
+ #-------------------------
+ # Utilities u_:
+ # Healthy Sick Sicker Dead Treatment
+ # 1       0.75 0.5    0    0.95
+ #-------------------------
+
+# SOLUTION
 # Cost and utility inputs 
 c_H     <- 2000            # cost of remaining one cycle in the healthy state
 c_S1    <- 4000            # cost of remaining one cycle in the sick state
@@ -1033,6 +1109,7 @@ u_S1    <- 0.75            # utility when sick
 u_S2    <- 0.5             # utility when sicker
 u_D     <- 0               # utility when dead
 u_Trt   <- 0.95            # utility when being treated (S1)
+
 
 # rate of death in healthy
 r_HD    <- - log(1 - p_HD) 
@@ -1098,10 +1175,69 @@ for (t in 1:n_t){ # throughout the number of cycles
 
 head(m_TR)  # head shows us the first six rows by default. 
 
-#=====================#
-# Exercise 3 
-#=====================#
+# EXERCISE 9
+ ##  1. Create vectors for the costs and utility of each treatment group
+ #  (e.g. v_u_trt    <- c(u_H, u_Trt, u_S2, u_D)
 
+v_u_trt <-
+v_u_no_trt <-
+v_c_trt <-
+v_c_no_trt <-
+
+ #  2. Estimate mean costs and QALYs for each year (hint: need to use matrix 
+ #  multiplication, matrix trace %*% vector of costs and utilities)
+
+ #  3. If you didn't in the the previous step, apply discount weights (hint: need
+ #  to use transpose function t() and matrix multiplication, 
+ #  e.g. t(vector of costs) %*% discount rate 
+  
+ #  4. Create results table by combining the 4 vectors
+
+  # SOLUTION 9
+
+# 1. Create vectors for the costs and utility of each treatment group
+#  (e.g. v_u_trt    <- c(u_H, u_Trt, u_S2, u_D)
+v_u_trt    <- c(u_H, u_Trt, u_S2, u_D)
+v_u_no_trt <- c(u_H, u_S1, u_S2, u_D)
+v_c_trt    <- c(c_H, c_S1 + c_Trt, c_S2 + c_Trt, c_D)
+v_c_no_trt <- c(c_H, c_S1, c_S2, c_D)
+
+v_u_trt
+v_u_no_trt
+v_c_trt
+v_c_no_trt
+
+#  2. Estimate mean costs and QALYs for each year (hint: need to use matrix 
+#  multiplication, matrix trace %*% vector of costs and utilities)
+
+v_E_no_trt <- m_TR %*% v_u_no_trt
+v_E_trt    <- m_TR %*% v_u_trt
+v_C_no_trt <- m_TR %*% v_c_no_trt
+v_C_trt    <- m_TR %*% v_c_trt
+
+head(v_E_no_trt)
+head(v_E_trt)
+head(v_C_no_trt)
+head(v_C_trt)
+
+#  3. If you didn't in the the previous step, apply discount weights (hint: need
+#  to use transpose function t() and matrix multiplication, 
+#  e.g. t(vector of costs) %*% discount rate 
+
+te_no_trt <- t(v_E_no_trt) %*% v_dwe  
+te_trt    <- t(v_E_trt) %*% v_dwe
+tc_no_trt <- t(v_C_no_trt) %*% v_dwc
+tc_trt    <- t(v_C_trt)    %*% v_dwc
+
+#  4. Create results table by combining the 4 vectors
+results <- c(
+  "Cost_NoTrt" = tc_no_trt, 
+  "Cost_Trt"   = tc_trt, 
+  "QALY_NoTrt" = te_no_trt, 
+  "QALY_Trt" = te_trt,
+  "ICER" = (tc_trt - tc_no_trt)/
+    (te_trt - te_no_trt)
+)
 
 #=====================#
 # Markov Modelling with PSA
