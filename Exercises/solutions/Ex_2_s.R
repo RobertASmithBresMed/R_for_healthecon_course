@@ -44,7 +44,7 @@ primes <- c(2,3,5,7,11)
 
 # 7.Print all primes that are larger than or equal to 5 using subsetting.
 
-primes[primes <= 5]
+primes[primes >= 5]
 
 # 8.Create an ‘animal top speed data frame’: speed_dat. It should have three columns, named animal, speed, flying, and should contain the following information:
 
