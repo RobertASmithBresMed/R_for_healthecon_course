@@ -269,7 +269,7 @@ dat[-1,]
 ##Info: Remember, F (=FALSE) and "F" (= F as a character) have different meanings in R.
 
 female <- dat$sex == "F"
-df[female,]
+dat[female,]
 
 # 6. Create a vector primes with elements 2,3,5,7, and 11.
 ##Info: You can combine elements into a vector with the c(element_1, element_2,...) command.
