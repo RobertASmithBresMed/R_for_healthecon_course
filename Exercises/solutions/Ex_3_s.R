@@ -8,12 +8,11 @@
 # 1. check your environment
 ls()
 
-# 2. clear old df 
+# 2. clear the clutter
 rm(list = ls())
 
-# 3. read in the data from a website 
-# dat <- read.csv("URL")
-dat <- read.csv("https://raw.githubusercontent.com/bitowaqr/R_for_healthecon_course/main/data/df_framingham.csv")
+# 3. read in the data
+dat <- read.csv("./data/df_framingham.csv")
 
 # 4. get an overview of the dataframe using the str functiom
 str(dat)

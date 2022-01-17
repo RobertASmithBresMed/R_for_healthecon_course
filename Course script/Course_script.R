@@ -107,16 +107,13 @@ rm(list=ls())
 b <- 4<2
 b
 
-# EXERCISE 1: 
+# ___EXERCISE 1:  ----
 # 1. Create an object foo and set it to be 8
 # 2. Create another object bar, and set it to be 7
 # 3. Is foo divided by bar greater than 1.14 ?
 
-# SOLUTION
+# --> Solutions can be found in the './Exercises/solutions/' folder
 
-foo <- 8
-bar <- 7
-foo/bar > 1.14
 
 #====================#
 # 1.7 Object Classes ----
@@ -186,21 +183,24 @@ df[,1:3]
 df[,c(1,3)]
 #selecting a row(s)
 df[1,]
+
 #We might also want to select observations (rows) based on the characteristics of the data
 #E.g. we might want to only look at the data for people who are taller than 1.40m
 #create a logical variable called min_height which contains T/F for each individual being over 140cm.
 min_height <- df$height >= 1.4
 min_height
+
 # Subset the data to include only those observations (rows) for which height > 140cm (using min_height).
 df.at_least_140 <- df[min_height,]
 df.at_least_140
+
 #People smaller than 1.4m
 # Subset the data to include only those who are not above min-height of 140cm.
 smaller <- df$height < 1.4
 df[smaller,]
 df[!min_height,]
 
-# EXERCISE 2: 
+# ___EXERCISE 2:  ------
 
 dat = read.table(text=
                    "height weight first_name sex      bmi
@@ -238,62 +238,6 @@ dat = read.table(text=
 #Info 1: The vector flying should be set to TRUE or FALSE.
 #Info 2: Use data.frame(vector_1, vector_2,...) to combine multiple vectors into a data frame.
 
-# Solution
-
-# 1.Select the 3rd row from the data frame dat
-
-dat[3,]
-
-# 2.Select the weight variable from the data frame using your preferred method.
-##Info: Remember, there are multiple ways to do this: you can use the $ to index the right column, or use the [ , ] with a number or a “variable_name”.
-
-dat$weight 
-# or dat[,2] 
-# or dat[,"weight"]
-
-# 3.Select Alice’s data from the data frame.
-##Info: It might be helpful to type in dat and press  . to check which row Alice’s data is in.
-
-dat[1,]
-
-# 4.Print dat without it’s first row
-##Info: You can select rows 2,3, and 4, but you can also show everything except row 1 - try the latter approach.
-
-dat[-1,]
-# but you could also use:
-# dat[2:4,]
-# or
-# dat[ c(F, T, T, T), ]
-
-# 5.Subset the data frame to show just the data for the females
-##Info: Remember, F (=FALSE) and "F" (= F as a character) have different meanings in R.
-
-female <- dat$sex == "F"
-df[female,]
-
-# 6. Create a vector primes with elements 2,3,5,7, and 11.
-##Info: You can combine elements into a vector with the c(element_1, element_2,...) command.
-
-primes <- c(2,3,5,7,11)  
-
-# 7.Print all primes that are larger than or equal to 5 using subsetting.
-
-primes[primes <= 5]
-
-# 8.Create an ‘animal top speed data frame’: speed_dat. It should have three columns, named animal, speed, flying, and should contain the following information:
-
-#The "lion" can run 80km/h, it’s not flying.
-#The "marlin" can swim 129km/h, it’s also not flying.
-#Finally, the "eagle" can do 240km/h, and of course it’s flying.
-
-#Info 1: The vector flying should be set to TRUE or FALSE.
-#Info 2: Use data.frame(vector_1, vector_2,...) to combine multiple vectors into a data frame.
-
-animal <- c("lion", "marlin", "eagle")  
-speed <- c(80, 129, 240)
-flying <- c(F, F, T)
-speed_dat <- data.frame(animal, speed, flying)
-speed_dat
 
 
 #=====================#
@@ -322,20 +266,19 @@ ls()
 ## Local file path
 dat <- read.csv("./data/df_framingham.csv")
 
-## Downloading files from the internet
-dat <- read.csv("https://raw.githubusercontent.com/bitowaqr/R_for_healthecon_course/main/data/df_framingham.csv")
-
 
 #====================#
 # 2.3 Get an overview of the data set ----
 #====================#
 str(dat)
 
+View(dat)
+
 # a common error: NA
-mean(dat$sysBP)
+mean( dat$sysBP )
 
 # Inspect the first few rows of the data set
-head(dat)
+head(dat, n = 10)
 
 # --> NA values spooted!
 
@@ -375,15 +318,27 @@ quantile(dat$sysBP, probs = c(0.25, 0.75))
 # you can assign function outputs to objects
 BP_mean <- mean(dat$sysBP)
 BP_sd <- sd(dat$sysBP)
+sample_size <- nrow(dat)
 
 # and use these objects afterwards
-BP_mean -  1.96 * BP_sd
-BP_mean +  1.96 * BP_sd
+BP_se <- BP_sd/sqrt(sample_size)
+ci95_lower <- BP_mean -  1.96 * BP_se
+ci95_upper <- BP_mean +  1.96 * BP_se
+ci95 <- c(ci95_lower, ci95_upper)
+ci95
 
-
-# # Tip: do not 'attach' data frames, even if it's convenient !
+# # Tip 1: do not 'attach' data frames, even if it's convenient !
+# dat$sysBP
 # attach(dat)
 # sysBP
+# detach(dat)
+# sysBP
+
+# # Tip 2: R created deep copies
+# BP_sd_copy <- BP_sd
+# BP_sd <- 10
+# BP_sd
+# BP_sd_copy
 
 
 #====================#
@@ -425,9 +380,6 @@ fit1 = lm(sysBP ~ age, data = dat)
 # show summary results
 summary(fit1)
 
-# compute 95% confidence intervalls
-confint(fit1)
-
 # We can now add the regression line to the scatter plot
 # plot(x = dat$age, y = dat$sysBP)
 abline(fit1, col = "orange", lwd = 2)
@@ -439,6 +391,7 @@ fit1$coefficients
 fit1$coefficients[1] + 50 * fit1$coefficients[2]
 
 # or use the 'predict' function for this:
+predict(fit1)
 # predict(fit1, newdata = data.frame(age=50))
 
 
@@ -448,40 +401,25 @@ fit1$coefficients[1] + 50 * fit1$coefficients[2]
 # Number of males and females in the data set
 table(dat$sex)
 
-# Bloodpressure by sex
-## using a boxplot 
-boxplot(dat$sysBP ~ dat$sex)
-# no difference?
-
-mean(dat$sysBP[dat$sex=="female"])
-mean(dat$sysBP[dat$sex=="male"])
-# indeed it seems, no difference
-
-# multivariate regression
+# multivariate regression (additive)
 fit_multi = lm(sysBP ~ age + sex, data = dat)
 summary(fit_multi)
 
-# regressions seems to confirm this: 
-# no difference in blood pressure between males and females?
-
+# multivariate regression (interaction)
 fit_interaction = lm(sysBP ~ age * sex, data = dat)
 summary(fit_interaction)
 
-# illustrate results
-fit_interaction = lm(sysBP ~ BMI , data = dat)
-summary(fit_interaction)
 
 
-# EXERCISE 3: is BMI a risk factor for high blood pressure?
+# ___EXERCISE 3: is BMI a risk factor for high blood pressure? ------
 # 1. check your environment
-ls()
+# ls()
 
-# 2. clear old df 
-rm(list = ls())
+# 2. clear the clutter
+# rm(list = ls())
 
-# 3. read in the data from a website 
-# dat <- read.csv("URL")
-dat <- read.csv("https://raw.githubusercontent.com/bitowaqr/R_for_healthecon_course/main/data/df_framingham.csv")
+# 3. read in the data
+# dat <- read.csv("./data/df_framingham.csv")
 
 # 4. get an overview of the dataframe using the str functiom
 
@@ -505,44 +443,6 @@ dat <- read.csv("https://raw.githubusercontent.com/bitowaqr/R_for_healthecon_cou
 
 # 13. does BMI increase the risk of high BP independent of age and sex?
 
-######
-
-
-# SOLUTION:
-
-# 4. get an overview of the dataframe using the str functiom
-str(dat)
-
-# 5. look at the first few rows using the head function
-head(dat)
-
-# 6. how many NAs are there in sysBP?
-sum(is.na(dat$sysBP))
-
-# 7. remove all rows which contain NAs
-dat =  dat[complete.cases(dat),]
-
-# 8. what is the median BMI?
-median(dat$BMI)
-
-# 9. what is the maximum BMI?
-max(dat$BMI)
-
-# 10. plot the relationship between BMI and sysBP
-plot(dat$BMI,dat$sysBP)
-
-# 11. fit a linear regression model to assess the association between
-# BMI and sysBP, assign it to an object called fit2,
-# and use summary(...) to show results
-fit2 = lm(sysBP ~ BMI, dat)
-summary(fit2)
-
-# 12. add regression line to plot 
-abline(fit2, col = "purple", lwd = 2)
-
-# 13. does BMI increase the risk of high BP independent of age and sex?
-fit_multi2 = lm(sysBP ~ BMI + age * sex, dat)
-summary(fit_multi2)
 
 
 #====================#
@@ -611,70 +511,14 @@ abline(v = c(100,120,140, 160,180), col = "gray", lwd = 0.5)
 # add figure caption
 title("Figure 1: association between sys BP and 10 year risk of CHD")
 
-# EXERCISE 4: practice logistic regression
+
+# ___EXERCISE 4: practice logistic regression ------
   # does the relationship between sysBP and risk of CHD 
   # differ by sex?
   # 1. fit a log. regression model with sysBP + sex
   # 2. predict the risk of CHD for a range of sysBP for males and females separately
   # 3. visualise the results in one plot
 
-
-# SOLUTION
-# 1 fit a log. regression model with sysBP + sex
-fit_log2 = glm(TenYearCHD ~ sysBP+sex, family = binomial(link = "logit"), data = dat)
-summary(fit_log2)
-
-# 2 predict the risk of CHD for a range of sysBP for males and females separately
-new_sysBP_m <- data.frame(
-  sysBP = seq(from = min(dat$sysBP), to = max(dat$sysBP), by = 1),
-  sex = "male"
-  )
-new_sysBP_f <- data.frame(
-  sysBP = seq(from = min(dat$sysBP), to = max(dat$sysBP), by = 1),
-  sex = "female"
-)
-
-new_sysBP_m$CHD_risk = predict(fit_log2, new_sysBP_m, type="response")
-new_sysBP_f$CHD_risk = predict(fit_log2, new_sysBP_f, type="response")
-
-
-# 3 visualise the results in one plot
-dot_color2 = ifelse(dat$sex == "female", "purple", "green")
-
-plot(
-  x = dat$sysBP, 
-  y = dat$TenYearCHD,
-  col = dot_color2,
-  xlab = "Systolic BP (mmHg)",
-  ylab = "10 year risk of chronic heart disease"
-)
-
-# add some grid lines
-abline(h = c(0.2, 0.4,0.6,0.8,1), col = "gray", lwd = 0.5)
-abline(v = c(100,120,140, 160,180), col = "gray", lwd = 0.5)
-
-
-# predicted risk females
-lines(
-  x = new_sysBP_m$sysBP, 
-  y = new_sysBP_m$CHD_risk, 
-  lwd=2, lty = 2,
-  col = "green"
-  )
-
-#  predicted risk males
-lines(
-  x = new_sysBP_f$sysBP, 
-  y = new_sysBP_f$CHD_risk, 
-  lwd=2, lty = 3,
-  col = "purple"
-)
-
-# add figure caption
-title("Figure 2: association between sys BP and 10 year risk of CHD by sex")
-
-# add legend
-legend(x = 100, y = 0.5, c("males","females"), col = c("green","purple"), pch=1)
 
 
 # 2.11 EXCURSION: ggplot2  ------
@@ -823,7 +667,7 @@ install.packages(rmarkdown)
 tinytex::install_tinytex()
 
 #=====================#
-# Rmarkdown Exercise 1
+# Rmarkdown Exercise 1 -------
 #=====================#
 
 # 1. Change the format to html
@@ -878,7 +722,7 @@ for(i in 1:ncol(df)) {
 }
 
 
-## EXERCISE 5: 
+## ___EXERCISE 5:  ------
 
 # check if row sum to 1
 
@@ -935,7 +779,7 @@ f_simple
 f_simple(1,2,3)
 f_simple(6,5,12)
 
-# EXERCISE 6: Try creating a function
+# ___EXERCISE 6: Try creating a function -------
   # Create a function that calculates the difference 
   # between the maximum & mean of the three numbers (x, y, z) 
   # and returns a single number.
@@ -995,7 +839,7 @@ f_gen_psa <- function(n_sim = 1000){
 
 f_gen_psa(n_sim = 5)
 
-# EXERCISE 7: Create a probabilistic function
+# ___EXERCISE 7: Create a probabilistic function -------
 # Create a function 'flipCoin' that takes 'n' ar an argument and
 # simulates flipping a coin n times 
 # AND/OR 
@@ -1019,7 +863,7 @@ trowDice = function(k, n){
 
 
 #=====================#
-# Rmarkdown Exercise 2
+# Rmarkdown Exercise 2 -------
 #=====================#
 
 # Create an R markdown report using the previous exercise as a template
@@ -1054,19 +898,19 @@ f_gdpPercap <- function(continent, year){
 # DAY 3  -----
 #=============#
 
-#####################################################################################
+#====================================================================================#
 ## The code was originally created by the below, it's a widely used teaching model ##
 ## Authors: Eline Krijkamp, Fernando Alarid-Escudero,                              ##
 ##          Eva Enns, Hawre Jalal, Myriam Hunink and  Petros Pechlivanoglou        ##
 ## Krijkamp EM, et al. Microsimulation modeling for health decision sciences       ##
 ## using R: a tutorial. Med. Decis. Making. 2018;.                                 ##
-#####################################################################################
+#====================================================================================#
 
 # the code has been adapted slightly for the purposes of this course.
 
 rm(list = ls())  # delete everything that is in R's memory
 
-#####################################################################################
+#====================================================================================#
 
 Strategies     <- c("No Treatment", "Treatment")     # strategy names 
 n_age_init     <- 25                                 # age at baseline
@@ -1085,17 +929,17 @@ p_S1S2  <- 0.105         	 # probability to become sicker when sick
 hr_S1   <- 3             	 # hazard ratio of death in sick vs healthy
 hr_S2   <- 10            	 # hazard ratio of death in sicker vs healthy 
 
-# EXERCISE 8
+# ___EXERCISE 8 --------
  # 1. Set up remaining inputs
- #-------------------------
+ #-------------------------#
  # Costs c_:
  # Healthy Sick Sicker Dead Treatment
  # 2000    4000 15000  0    12000
- #-------------------------
+ #-------------------------#
  # Utilities u_:
  # Healthy Sick Sicker Dead Treatment
  # 1       0.75 0.5    0    0.95
- #-------------------------
+ #-------------------------#
 
 # SOLUTION
 # Cost and utility inputs 
@@ -1175,7 +1019,7 @@ for (t in 1:n_t){ # throughout the number of cycles
 
 head(m_TR)  # head shows us the first six rows by default. 
 
-# EXERCISE 9
+# ___EXERCISE 9 --------
  ##  1. Create vectors for the costs and utility of each treatment group
  #  (e.g. v_u_trt    <- c(u_H, u_Trt, u_S2, u_D)
 
